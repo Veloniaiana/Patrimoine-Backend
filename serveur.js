@@ -3,10 +3,12 @@ import fs from 'node:fs/promises';
 import { URL } from 'node:url';
 import Possession from "./models/possessions/Possession.js";
 
-const PORT = 3001;
+// Utilise le port fourni par l'environnement ou 3001 en fallback
+const PORT = process.env.PORT || 3001;
 
 const server = http.createServer(async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+    // Permettre l'accès depuis n'importe quelle origine (temporaire)
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -31,7 +33,7 @@ const server = http.createServer(async (req, res) => {
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(patrimoine.data.possessions));
-        }else if (parsedUrl.pathname === '/patrimoineValeur' && method === 'POST') {
+        } else if (parsedUrl.pathname === '/patrimoineValeur' && method === 'POST') {
             const body = [];
             req.on('data', chunk => body.push(chunk));
             req.on('end', async () => {
